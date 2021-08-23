@@ -9,10 +9,15 @@ import { ChannelsModule } from './channels/channels.module';
 import { ChannelsController } from './channels/channels.controller';
 import { ChannelsService } from './channels/channels.service';
 import { DmsModule } from './dms/dms.module';
-import { ChannelsModule } from './channels/channels.module';
 
 @Module({
-  imports: [ConfigModule.forRoot(), UsersModule, WorkspacesModule, ChannelsModule, DmsModule],
+  imports: [
+    ConfigModule.forRoot(),
+    UsersModule,
+    WorkspacesModule,
+    ChannelsModule,
+    DmsModule,
+  ],
   controllers: [AppController, ChannelsController],
   providers: [AppService, ChannelsService],
 })
