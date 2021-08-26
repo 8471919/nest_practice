@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -21,12 +22,24 @@ import { Workspaces } from './Workspaces';
 @Index('email', ['email'], { unique: true })
 @Entity({ schema: 'sleact', name: 'users' })
 export class Users {
+  @ApiProperty({
+    example: 1,
+    description: '사용자 아이디',
+  })
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
+  @ApiProperty({
+    example: 'zerohcho@gmail.com',
+    description: '이메일',
+  })
   @Column('varchar', { name: 'email', unique: true, length: 30 })
   email: string;
 
+  @ApiProperty({
+    example: '제로초',
+    description: '닉네임',
+  })
   @Column('varchar', { name: 'nickname', length: 30 })
   nickname: string;
 
@@ -69,6 +82,7 @@ export class Users {
   @OneToMany(() => Workspaces, (workspaces) => workspaces.Owner)
   OwnedWorkspaces: Workspaces[];
 
+  //manytomany는 joincolumn이 아니라 jointable을 하여 table을 넣는다.
   @ManyToMany(() => Workspaces, (workspaces) => workspaces.Members)
   @JoinTable({
     name: 'workspacemembers',
