@@ -14,23 +14,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const err = exception.getResponse() as
       | string
-      | { error: string; statusCode: 400; message: string[] };
+      | { error: string; statusCode: 400; message: string[] }; //class-validator의 typing
 
-    console.log(status, err);
-    response.status(status).json({ msg: err });
-    // let msg = '';
-    //     if (typeof err !== 'string' && err.error === 'Bad Request') {
-    //       return response.status(status).json({
-    //         success: false,
-    //         code: status,
-    //         data: err.message,
-    //       });
-    //     }
+    if (typeof err !== 'string' && err.error === 'Bad Request') {
+      return response.status(status).json({
+        success: false,
+        code: status,
+        data: err.message,
+      });
+    }
 
-    //     response.status(status).json({
-    //       success: false,
-    //       code: status,
-    //       data: err,
-    //     });
+    response.status(status).json({
+      success: false,
+      code: status,
+      data: err,
+    });
   }
 }
