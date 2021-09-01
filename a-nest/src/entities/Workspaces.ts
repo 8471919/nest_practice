@@ -25,7 +25,6 @@ import { Users } from './Users';
 @Entity({ schema: 'sleact', name: 'workspaces' }) //schema: DB명, name: 테이블명
 export class Workspaces {
   //칼럼들
-
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 

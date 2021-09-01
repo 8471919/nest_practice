@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  flatten,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,6 +15,16 @@ import { ChannelsController } from './channels/channels.controller';
 import { ChannelsService } from './channels/channels.service';
 import { DmsModule } from './dms/dms.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from './entities/Users';
+import { Channels } from './entities/Channels';
+import { ChannelChats } from './entities/ChannelChats';
+import { ChannelMembers } from './entities/ChannelMembers';
+import { DMs } from './entities/DMs';
+import { Mentions } from './entities/Mentions';
+import { WorkspaceMembers } from './entities/WorkspaceMembers';
+import { Workspaces } from './entities/Workspaces';
+// import dotenv from 'dotenv';
+// dotenv.config();
 
 @Module({
   imports: [
@@ -27,9 +42,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: ['entities/*.js'], //아예 하나씩 다 import해도됨
+      entities: [
+        Users,
+        Channels,
+        ChannelChats,
+        ChannelMembers,
+        DMs,
+        Mentions,
+        WorkspaceMembers,
+        Workspaces,
+      ], //['entities/*.ts'], //아예 하나씩 다 import해도됨
       // autoLoadEntities: true, //버그가 있음. 직접 entity를 임포트하자.
-      synchronize: true, //개발환경일 때만(그때도 처음 돌릴때만 true) true, data가 손실될 수 있다.
+      synchronize: false, //개발환경일 때만(그때도 처음 돌릴때만 true) true, data가 손실될 수 있다.
       logging: true, //개발할 때 query문을 볼 수 있게 하기위해 로깅을 true로 둔다.
       // migrations: [__dirname + "src/migrations/*.ts"],
       // cli: { migrationDir: 'src/migrations'},
