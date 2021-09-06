@@ -16,6 +16,8 @@ import { DMs } from './DMs';
 import { Mentions } from './Mentions';
 import { WorkspaceMembers } from './WorkspaceMembers';
 import { Users } from './Users';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 //인덱스는 sql 성능을 높이기 위해 사용. 없어도 된다.
 
@@ -28,9 +30,21 @@ export class Workspaces {
   @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
   id: number;
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: '슬리액트',
+    description: '워크스페이스명',
+  })
   @Column('varchar', { name: 'name', unique: true, length: 30 }) //name: table column이름
   name: string; //db에서는 컬럼이름이 name이지만, 여기서는 이 변수를 고쳐 다른 이름으로 사용할 수 있다.
 
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    example: 'sleact',
+    description: 'url 주소',
+  })
   @Column('varchar', { name: 'url', unique: true, length: 30 })
   url: string;
 
