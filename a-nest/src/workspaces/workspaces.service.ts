@@ -20,8 +20,6 @@ export class WorkspacesService {
     private channelMembersRepository: Repository<ChannelMembers>,
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
-
-    private workspacesService: WorkspacesService,
   ) {}
   //상속받아서 쓸 때, dependency injection이 안되는 문제를 해결하려면 이렇게 쓰자.
   //   @InjectRepository(Workspaces)
@@ -47,5 +45,50 @@ export class WorkspacesService {
     });
   }
 
-  async createWorkspace(name: string, url: string, myId: number) {}
+  async createWorkspace(name: string, url: string, myId: number) {
+    const workspace = this.workspacesRepository.create({
+      name,
+      url,
+      OwnerId: myId,
+    });
+    const returned = await this.workspacesRepository.save(workspace);
+
+    const workspaceMember = new WorkspaceMembers();
+    workspaceMember.UserId = myId;
+    workspaceMember.WorkspaceId = returned.id;
+    const channel = new Channels();
+    channel.name = '일반';
+    channel.WorkspaceId = returned.id;
+    const [, channelReturned] = await Promise.all([
+      this.workspaceMembersRepository.save(workspaceMember),
+      this.channelsRepository.save(channel),
+    ]);
+    const channelMember = new ChannelMembers();
+    channelMember.UserId = myId;
+    channelMember.ChannelId = channelReturned.id;
+    await this.channelMembersRepository.save(channelMember);
+  }
+
+  async getWorkspaceMembers(url: string) {
+    return this.usersRepository
+      .createQueryBuilder('u')
+      .innerJoin('u.WorkspaceMembers', 'm')
+      .innerJoin('m.Workspace', 'w', 'w.url = :url', { url: url })
+      .getMany(); //getRawMany() 와의 차이
+    // ID, EMAIL, PASSWORD, Workspace.NAME, Workspace.URL   -> getRawMany()
+    /*    {
+        id: '',
+        email: '',
+        'Workspace.name': '',
+      } */
+
+    //getMany()
+    /*{ 
+        id: '',
+        email: '',
+        Workspace: {
+          name: '',
+        }
+      } */
+  }
 }
