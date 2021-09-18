@@ -56,7 +56,7 @@ import { AuthModule } from './auth/auth.module';
       ], //['entities/*.ts'], //아예 하나씩 다 import해도됨
       // autoLoadEntities: true, //버그가 있음. 직접 entity를 임포트하자.
       synchronize: false, //개발환경일 때만(그때도 처음 돌릴때만 true) true, data가 손실될 수 있다.
-      logging: true, //개발할 때 query문을 볼 수 있게 하기위해 로깅을 true로 둔다.
+      logging: process.env.Node_ENV !== 'production', //개발할 때 query문을 볼 수 있게 하기위해 로깅을 true로 둔다.
       // migrations: [__dirname + "src/migrations/*.ts"],
       // cli: { migrationDir: 'src/migrations'},
       // charset: 'utf8mb4',
