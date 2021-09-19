@@ -24,6 +24,8 @@ import { Mentions } from './entities/Mentions';
 import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
 import { AuthModule } from './auth/auth.module';
+import { EventsModule } from './events/events.module';
+import { EventsGateway } from './events/events.gateway';
 // import dotenv from 'dotenv';
 // dotenv.config();
 
@@ -62,9 +64,10 @@ import { AuthModule } from './auth/auth.module';
       // charset: 'utf8mb4',
       keepConnectionAlive: true, //서버재시작(핫리로딩사용시)시 typeorm이 db연결을 유지하게 하기 위해서 true로 해둔다.
     }),
+    EventsModule,
   ],
   controllers: [AppController, ChannelsController],
-  providers: [AppService, ChannelsService],
+  providers: [AppService, ChannelsService, EventsGateway],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {

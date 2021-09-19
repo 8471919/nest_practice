@@ -5,6 +5,7 @@ import { ChannelMembers } from 'src/entities/ChannelMembers';
 import { Channels } from 'src/entities/Channels';
 import { Users } from 'src/entities/Users';
 import { Workspaces } from 'src/entities/Workspaces';
+import { EventsGateway } from 'src/events/events.gateway';
 import { MoreThan, Repository } from 'typeorm';
 
 @Injectable()
@@ -20,6 +21,7 @@ export class ChannelsService {
     private channelChatsRepository: Repository<ChannelChats>,
     @InjectRepository(Users)
     private usersRepository: Repository<Users>,
+    private eventsGateway: EventsGateway,
   ) {}
 
   async findById(id: number) {
@@ -229,5 +231,11 @@ export class ChannelsService {
       relations: ['User', 'Channel'],
     });
     //socket.io로 워크스페이스+채널 사용자한테 전송
+    //eventsGatewa.server는 io랑 같은 역할을 한다.
+    //to 뒤에는 웹소켓 주소를 적어주면 된다.
+    //emit은 메시지 내용은 chatWithUser라는 채팅내용이 모두에게 전달된다.
+    this.eventsGateway.server
+      .to(`/ws-${url}-${channel.id}`)
+      .emit('message', chatWithUser);
   }
 }
