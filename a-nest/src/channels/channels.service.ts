@@ -130,6 +130,7 @@ export class ChannelsService {
       .getMany();
   }
 
+  //채팅 저장
   async createWorkspaceChannelChats(
     url: string,
     name: string,
@@ -158,6 +159,7 @@ export class ChannelsService {
       .emit('message', chatWithUser);
   }
 
+  //이미지 저장
   async createWorkspaceChannelImages(
     url: string,
     name: string,
@@ -172,6 +174,11 @@ export class ChannelsService {
       })
       .where('channel.name = :name', { name })
       .getOne();
+
+    if (!channel) {
+      throw new NotFoundException('채널이 존재하지 않습니다.');
+    }
+
     for (let i = 0; i < files.length; i++) {
       const chats = new ChannelChats();
       chats.content = files[i].path;

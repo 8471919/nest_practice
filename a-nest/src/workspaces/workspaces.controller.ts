@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from 'src/common/decorators/user.decorator';
 import { Users } from 'src/entities/Users';
+import { CreateWorkspaceDto } from './dto/create-workspace.dto';
 import { WorkspacesService } from './workspaces.service';
 
 @ApiTags('WORKSPACE')

@@ -25,7 +25,6 @@ import { WorkspaceMembers } from './entities/WorkspaceMembers';
 import { Workspaces } from './entities/Workspaces';
 import { AuthModule } from './auth/auth.module';
 import { EventsModule } from './events/events.module';
-import { EventsGateway } from './events/events.gateway';
 // import dotenv from 'dotenv';
 // dotenv.config();
 
@@ -66,8 +65,8 @@ import { EventsGateway } from './events/events.gateway';
     }),
     EventsModule,
   ],
-  controllers: [AppController, ChannelsController],
-  providers: [AppService, ChannelsService, EventsGateway],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): any {
