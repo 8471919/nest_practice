@@ -22,7 +22,13 @@ export class UsersService {
     private channelMembersRepository: Repository<ChannelMembers>,
   ) {}
 
-  getUser() {}
+  async findByEmail(email: string) {
+    return this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password'],
+    });
+  }
+
   async join(email: string, nickname: string, password: string) {
     // //아래의 것들은 DTO에서 자동으로 체크가 가능하다.
     // if (!email) {
